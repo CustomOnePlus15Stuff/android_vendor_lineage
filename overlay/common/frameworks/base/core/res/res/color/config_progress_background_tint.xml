@@ -15,5 +15,5 @@
 -->
 
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:color="?android:attr/colorControlActivated" />
+    <item android:color="#FAA0A0"/>
 </selector>
