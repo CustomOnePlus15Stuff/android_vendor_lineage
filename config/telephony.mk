@@ -13,7 +13,6 @@ PRODUCT_PACKAGES += \
 
 # Telephony packages
 PRODUCT_PACKAGES += \
-    messaging \
     Stk
 
 # Default ringtone
@@ -27,4 +26,4 @@ PRODUCT_PRODUCT_PROPERTIES += \
 
 # Disable mobile data by default
 PRODUCT_PRODUCT_PROPERTIES += \
-    ro.com.android.mobiledata=false
+    ro.com.android.mobiledata=true
