@@ -134,12 +134,6 @@ PRODUCT_RESTRICT_VENDOR_FILES := false
 ##############################
 
 
-# Disable ADB authentication
-PRODUCT_SYSTEM_EXT_PROPERTIES += ro.adb.secure=0
-
-# Forcebly disable ADB authentication
-PRODUCT_SYSTEM_EXT_PROPERTIES += ro.adb.secure=0
-
 # Enable ADB authentication
 PRODUCT_SYSTEM_EXT_PROPERTIES += ro.adb.secure=1
 
@@ -149,99 +143,8 @@ PRODUCT_NOT_DEBUGGABLE_IN_USERDEBUG := true
 # Disable extra StrictMode features on all non-engineering builds
 PRODUCT_PRODUCT_PROPERTIES += persist.sys.strictmode.disable=true
 
-
-# Additional props
 PRODUCT_PRODUCT_PROPERTIES += \
-    dalvik.vm.debug.alloc=0 \
-    ro.url.legal=http://www.google.com/intl/%s/mobile/android/basic/phone-legal.html \
-    ro.url.legal.android_privacy=http://www.google.com/intl/%s/mobile/android/basic/privacy.html \
-    ro.error.receiver.system.apps=com.google.android.gms \
-    ro.atrace.core.services=com.google.android.gms,com.google.android.gms.ui,com.google.android.gms.persistent \
-    ro.com.google.ime.theme_id=5 \
-    ro.opa.eligible_device=true \
-    ro.com.android.wifi-watchlist=GoogleGuest \
-    drm.service.enabled=true \
-    persist.sys.dun.override=0 \
-    persist.sys.disable_rescue=true
-
-# GAPPS
-ifeq ($(TARGET_BUILD_PACKAGE),3)
-    # Default notification/alarm sounds
-    PRODUCT_PRODUCT_PROPERTIES += \
-        ro.config.notification_sound=Popcorn.ogg \
-        ro.config.alarm_alert=Bright_morning.ogg
-
-    # Default ringtone
-    PRODUCT_PRODUCT_PROPERTIES += \
-        ro.config.ringtone=The_big_adventure.ogg
-
-    # Gboard Props
-    PRODUCT_PRODUCT_PROPERTIES += \
-        ro.com.google.ime.bs_theme=true \
-        ro.com.google.ime.system_lm_dir=/product/usr/share/ime/google/d3_lms
-
-    # Conditionally include pixel launcher and theme picker squad
-    ifeq ($(TARGET_INCLUDE_PIXEL_LAUNCHER),true)
-        PRODUCT_PRODUCT_PROPERTIES += \
-            persist.sys.nexuslauncher=1
-
-        $(call inherit-product, vendor/pixel/launcher/products/launcher.mk)
-        $(call inherit-product, vendor/pixel/themepicker/products/themepicker.mk)
-        $(call inherit-product, vendor/pixel/sounds/products/sounds.mk)
-    else
-        PRODUCT_PRODUCT_PROPERTIES += \
-            persist.sys.nexuslauncher=0
-    endif
-
-    # SetupWizard Props
-    PRODUCT_PRODUCT_PROPERTIES += \
-        ro.setupwizard.enterprise_mode=1 \
-        ro.setupwizard.esim_cid_ignore=00000001 \
-        setupwizard.feature.baseline_setupwizard_enabled=true \
-        setupwizard.feature.day_night_mode_enabled=true \
-        setupwizard.feature.default_locale_enhancement_enabled=true \
-        setupwizard.feature.device_info_icon_enabled=true \
-        setupwizard.feature.enable_gil= \
-        setupwizard.feature.enable_gil_logging=true \
-        setupwizard.feature.enable_minors_setup_flow=true \
-        setupwizard.feature.enable_parental_notice_activity=true \
-        setupwizard.feature.enable_parental_setup=true \
-        setupwizard.feature.enhanced_setup_design_metrics=true \
-        setupwizard.feature.is_suw_onboarding_contract_enabled=true \
-        setupwizard.feature.joined_up_loading=true \
-        setupwizard.feature.locale_agnostic_enabled=true \
-        setupwizard.feature.enable_quick_start_flow=true \
-        setupwizard.feature.enable_restore_anytime=true \
-        setupwizard.feature.enable_wifi_tracker=true \
-        setupwizard.feature.lifecycle_refactoring=true \
-        setupwizard.feature.notification_refactoring=true \
-        setupwizard.feature.portal_notification=true \
-        setupwizard.feature.provisioning_profile_mode=true \
-        setupwizard.theme=glif_expressive
-
-    $(call inherit-product, vendor/pixel/gms/products/gms.mk)
-else
-    ifeq ($(TARGET_BUILD_PACKAGE),2)
-        $(call inherit-product, vendor/microg/product.mk)
-    endif
-
-    PRODUCT_PRODUCT_PROPERTIES += \
-        persist.sys.nexuslauncher=0
-
-    PRODUCT_PRODUCT_PROPERTIES += \
-        ro.config.notification_sound=Argon.ogg \
-        ro.config.alarm_alert=Hassium.ogg \
-        ro.config.ringtone=Orion.ogg
-
-    PRODUCT_PRODUCT_PROPERTIES += \
-        ro.setupwizard.enterprise_mode=1 \
-        ro.setupwizard.network_required=false \
-        ro.setupwizard.gservices_delay=-1 \
-        ro.setupwizard.mode=OPTIONAL \
-        setupwizard.feature.predeferred_enabled=false \
-        setupwizard.feature.day_night_mode_enabled=true \
-        setupwizard.theme=glif_expressive
-endif
+    ro.ota.allow_downgrade=true
 
 # Blur
 ifneq ($(TARGET_SUPPORTS_BLUR),false)
@@ -338,12 +241,7 @@ PRODUCT_PACKAGES += \
 
 # Component overrides
 PRODUCT_PACKAGES += \
-    alpha-component-overrides.xml
-
-# Enable wireless Xbox 360 controller support
-PRODUCT_COPY_FILES += \
-    frameworks/base/data/keyboards/Vendor_045e_Product_028e.kl:$(TARGET_COPY_OUT_PRODUCT)/usr/keylayout/Vendor_045e_Product_0719.kl
-
+    lineage-component-overrides.xml
 
 ####################################
 ##        LINEAGE FEATURES        ##
@@ -382,7 +280,6 @@ PRODUCT_PACKAGES += \
 # Lineage interfaces
 PRODUCT_PACKAGES += \
     framework_compatibility_matrix.lineage.xml
-
 
 PRODUCT_PACKAGES += \
     LineageParts \
@@ -468,23 +365,14 @@ PRODUCT_ARTIFACT_PATH_REQUIREMENT_ALLOWED_LIST += \
     system/bin/procmem
 endif
 
+ifneq ($(TARGET_BUILD_VARIANT),user)
 # Root
 PRODUCT_PACKAGES += \
-    adb_root
-ifneq ($(TARGET_BUILD_VARIANT),user)
-ifeq ($(WITH_SU),true)
-PRODUCT_PACKAGES += \
+    adb_root \
     su
 
 PRODUCT_ARTIFACT_PATH_REQUIREMENT_ALLOWED_LIST += \
     system/xbin/su
-endif
-endif
-
-PRODUCT_ARTIFACT_PATH_REQUIREMENT_ALLOWED_LIST += \
-    system/xbin/su
-endif
-endif
 
 # SystemUI
 PRODUCT_DEXPREOPT_SPEED_APPS += \
@@ -495,8 +383,10 @@ PRODUCT_DEXPREOPT_SPEED_APPS += \
 PRODUCT_PRODUCT_PROPERTIES += \
     dalvik.vm.systemuicompilerfilter=speed
 
-# Audio files
-$(call inherit-product, vendor/lineage/audio/audio.mk)
+ifeq ($(TARGET_BUILD_VARIANT),userdebug)
+PRODUCT_PRODUCT_PROPERTIES += \
+    debug.sf.enable_transaction_tracing=false
+endif
 
 # SetupWizard
 ifneq ($(WITH_GMS), true)
