@@ -1,6 +1,6 @@
 flag_value {
   package: "com.android.systemui"
   name: "status_bar_root_modernization"
-  state: DISABLED
+  state: ENABLED
   permission: READ_ONLY
 }
