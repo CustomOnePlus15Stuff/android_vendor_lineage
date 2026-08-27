@@ -1,16 +1,9 @@
-<<<<<<< HEAD
 # Allow vendor/extra to override any property by setting it first
 $(call inherit-product-if-exists, vendor/extra/product.mk)
 
 # Exclude repos from bp scanning
 PRODUCT_SOURCE_ROOT_DIRS += -kernel/platform
 PRODUCT_SOURCE_ROOT_DIRS += -prebuilts/misc/protobuf_vendorcompat
-=======
-$(call inherit-product, vendor/alpha/config/audio.mk)
-$(call inherit-product, vendor/addons/config.mk)
-$(call inherit-product-if-exists, axion-sdk/ax_tflite/common.mk)
-$(call inherit-product-if-exists, vendor/certification/config.mk)
->>>>>>> 3f85bbbf (Fix common.mk and remove things from it)
 
 # Allow vendor prebuilt repos to exclude themselves from bp scanning
 -include $(sort $(wildcard vendor/*/*/exclude-bp.mk))
@@ -370,10 +363,6 @@ PRODUCT_PACKAGES += \
     OmniStyle \
     ThemesStub \
 
-<<<<<<< HEAD
-PRODUCT_COPY_FILES += \
-    vendor/lineage/prebuilt/common/etc/init/init.lineage-updater.rc:$(TARGET_COPY_OUT_SYSTEM_EXT)/etc/init/init.lineage-updater.rc
-=======
 ifneq ($(PRODUCT_NO_CAMERA),true)
     PRODUCT_PACKAGES += \
         Aperture
@@ -404,7 +393,6 @@ ifneq ($(TARGET_BUILD_VARIANT),user)
     PRODUCT_PACKAGES += \
         adb_root
 endif
->>>>>>> 3f85bbbf (Fix common.mk and remove things from it)
 
 # Config
 PRODUCT_PACKAGES += \
@@ -419,12 +407,8 @@ PRODUCT_PACKAGES += \
     htop \
     nano \
     setcap \
-<<<<<<< HEAD
-    vim
-=======
     sftp \
     ssh \
->>>>>>> 3f85bbbf (Fix common.mk and remove things from it)
 
 PRODUCT_PACKAGES += \
     nano_recovery
@@ -490,9 +474,5 @@ include vendor/lineage/config/version.mk
 
 -include vendor/lineage-priv/keys/keys.mk
 
-<<<<<<< HEAD
 -include $(WORKSPACE)/build_env/image-auto-bits.mk
 -include vendor/lineage/config/partner_gms.mk
-=======
--include $(WORKSPACE)/build_env/image-auto-bits.mk
->>>>>>> 3f85bbbf (Fix common.mk and remove things from it)
